@@ -11,8 +11,7 @@
 /* Seriesprång: lovingly illustrated pony characters (version 3) */
 .pony-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:100%;height:100%;min-width:0}
 .pony-wrap img.horse-svg{display:block;width:100%;height:100%;object-fit:contain;object-position:center;pointer-events:none;user-select:none}
-.pony-accessories{position:absolute;bottom:4%;right:0;display:flex;gap:3px;z-index:5;filter:drop-shadow(1px 2px 0 #34273c)}
-.pony-accessory{display:inline-grid;place-items:center;width:28px;height:28px;border:2px solid #34273c;border-radius:100%;background:#fff8e6;font-size:16px}
+.pony-gear{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5;overflow:visible}
 .hero-art .pony-wrap{width:min(100%,440px);height:290px;animation:bob 2.5s ease-in-out infinite}
 .hero-art .pony-wrap img.horse-svg{filter:drop-shadow(6px 9px 0 #32263f1d);animation:none}
 .horse-card .pony-wrap{width:100%;max-width:240px;height:155px}
@@ -20,7 +19,7 @@
 .arena-horse .pony-wrap{width:100%;height:auto;aspect-ratio:1.45/1}
 .arena-horse img.horse-svg{filter:drop-shadow(5px 6px 0 #57414a21)}
 #stableHorse .pony-wrap{min-height:220px;max-height:310px}
-@media(max-width:600px){.hero-art .pony-wrap{height:210px}.horse-card .pony-wrap{height:125px}.pony-accessory{width:23px;height:23px;font-size:13px}}
+@media(max-width:600px){.hero-art .pony-wrap{height:210px}.horse-card .pony-wrap{height:125px}}
 
 .course-track{position:absolute;left:7%;right:9%;bottom:64px;height:8px;border-radius:999px;background:#fff7d3;border:3px solid var(--ink);z-index:1}
 .course-track:before{content:'';position:absolute;inset:-12px 0 auto;height:8px;background:repeating-linear-gradient(90deg,transparent 0 42px,#ffdf6b 42px 58px);opacity:.85}
@@ -116,9 +115,19 @@ let state=load(),game=null,answer='',locked=false,screen='home',toastTimer=null,
 if(state.mode==='practice'||!MODE[state.mode])state.mode='club';
 const $=id=>document.getElementById(id);function save(){try{localStorage.setItem(STORAGE,JSON.stringify(state))}catch(e){}}function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function horseSVG(id,accessories=true){
-  const h=HORSES.find(x=>x.id===id)||HORSES[0];
-  const accessoriesHtml=accessories?state.equipped.map(x=>SHOP.find(s=>s.id===x)).filter(Boolean).map(s=>`<span class="pony-accessory" title="${esc(s.name)}">${s.emoji}</span>`).join(''):'';
-  return `<span class="pony-wrap"><img class="horse-svg" src="assets/${h.id}.png" alt="${esc(h.name)}, en glad tecknad ponny i språng" draggable="false">${accessoriesHtml?`<span class="pony-accessories" aria-label="Utrustning">${accessoriesHtml}</span>`:''}</span>`;
+const h=HORSES.find(x=>x.id===id)||HORSES[0];
+const fits={
+stjarna:{w:747,h:741,pad:'M236 383 Q275 340 314 353 Q358 336 403 372 L411 439 Q378 477 310 473 Q266 472 234 445Z',seat:'M262 341 Q300 306 352 308 Q390 310 403 329 Q370 349 342 346 Q315 344 292 367Z',bow:[501,151],crown:[585,44]},
+blixten:{w:772,h:747,pad:'M278 401 Q308 354 352 353 Q397 332 440 348 L448 430 Q431 476 363 480 Q311 480 276 451Z',seat:'M316 340 Q342 306 397 301 Q427 301 441 320 Q411 348 379 344 Q345 348 323 366Z',bow:[567,147],crown:[633,45]},
+pricken:{w:749,h:734,pad:'M256 380 Q289 346 319 346 Q366 317 408 350 L422 423 Q402 468 340 467 Q287 471 250 443Z',seat:'M286 336 Q318 305 365 305 Q395 307 411 328 Q377 347 343 347 Q322 346 309 361Z',bow:[529,151],crown:[611,42]}
+};
+const f=fits[h.id],has=x=>accessories&&state.equipped.includes(x)&&state.owned.includes(x);
+let gear='';
+if(has('blanket'))gear+=`<path d="${f.pad}" fill="#b58ded" fill-opacity=".9" stroke="#533c77" stroke-width="7" stroke-linejoin="round"/><path d="${f.pad}" fill="none" stroke="#ffe2a9" stroke-width="4" stroke-dasharray="13 7"/><path d="M340 402l15 17-15 16-15-16z" fill="#ffdc75" stroke="#533c77" stroke-width="3"/>`;
+if(has('saddle'))gear+=`<path d="${f.seat}" fill="#39aee3" stroke="#2d4a67" stroke-width="7" stroke-linejoin="round"/><path d="${f.seat}" fill="none" stroke="#fff2bc" stroke-width="3"/><path d="M317 331 Q350 315 385 323" fill="none" stroke="#cbf5ff" stroke-width="6" stroke-linecap="round"/>`;
+if(has('bow')){const [x,y]=f.bow;gear+=`<g transform="translate(${x} ${y})"><path d="M0 0 Q-33 -27 -35 0 Q-29 28 0 8 Q29 27 34 0 Q25 -28 0 0Z" fill="#ff75ad" stroke="#663c61" stroke-width="6"/><circle r="9" fill="#ffe07b" stroke="#663c61" stroke-width="4"/><path d="M-6 8 L-16 36 L1 28 L14 39 L10 8" fill="#fc97c4" stroke="#663c61" stroke-width="4"/></g>`;}
+if(has('crown')){const [x,y]=f.crown;gear+=`<g transform="translate(${x} ${y}) rotate(-8)"><path d="M-37 15 L-45 -25 L-21 -8 L0 -42 L19 -7 L43 -30 L36 15Z" fill="#ffd34e" stroke="#643b53" stroke-width="6" stroke-linejoin="round"/><rect x="-39" y="10" width="77" height="13" rx="4" fill="#ffe784" stroke="#643b53" stroke-width="5"/><circle cy="0" r="8" fill="#ff83ad" stroke="#643b53" stroke-width="3"/></g>`;}
+return `<span class="pony-wrap"><img class="horse-svg" src="assets/${h.id}.png" alt="${esc(h.name)}, en glad tecknad ponny i språng" draggable="false">${gear?`<svg class="pony-gear" viewBox="0 0 ${f.w} ${f.h}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${gear}</svg>`:''}</span>`;
 }
 function renderTop(){$('starCount').textContent=state.stars;$('stableStars').textContent=state.stars;$('soundBtn').textContent=state.sound?'🔊':'🔇';$('soundBtn').setAttribute('aria-label',state.sound?'Stäng av ljud':'Sätt på ljud');$('heroHorse').innerHTML=horseSVG(state.horse);}
 function toast(message){const area=$('toastArea');area.innerHTML=`<div class="toast">${esc(message)}</div>`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{area.innerHTML=''},2700)}
