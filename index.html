@@ -167,7 +167,7 @@ const $=id=>document.getElementById(id);function save(){try{localStorage.setItem
 function currentStageName(){return state.stage===0?'Grundhäst':SHOP[state.stage-1].name}
 function stageSource(){
  const level=Math.max(0,Math.min(10,Number(state.stage)||0));
- return 'assets/stages/stage'+String(level).padStart(2,'0')+'.webp?v=3';
+ return 'assets/stages-v2/stage'+String(level).padStart(2,'0')+'.webp?v=5';
 }
 function horseSVG(id,accessories=true){
  return `<span class="pony-wrap"><img class="horse-svg" src="${stageSource()}" alt="Stjärna, ${esc(currentStageName())}" draggable="false"></span>`;
