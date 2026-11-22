@@ -132,11 +132,11 @@
  </div></div></section>
 <section class="screen" id="screen-game" hidden><div class="panel"><div class="heading"><div><h1 id="gameTitle">🎀 Klubbhoppning</h1><div class="muted" id="gameSubtitle" style="font-weight:800">Du klarar det här!</div></div><button class="mini-btn" id="leaveGame">✕ Avsluta</button></div><div class="progress-label"><span id="progressText">Hinder 1 av 5</span><span id="scoreText">⭐ 0 rätt</span></div><div class="progress-bar" role="progressbar" aria-label="Loppets framsteg" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div><div class="arena" aria-label="S-formad hoppbana med alla hinder synliga"><div class="arena-inner"><svg class="course-map" viewBox="0 0 720 360" preserveAspectRatio="none" aria-hidden="true"><path class="course-border" d="M 68 278 L 600 278 C 690 278 686 173 600 173 L 132 173 C 45 173 45 70 132 70 L 626 70"/><path class="course-path" id="coursePath" d="M 68 278 L 600 278 C 690 278 686 173 600 173 L 132 173 C 45 173 45 70 132 70 L 626 70"/></svg><div class="course-decor" aria-hidden="true">🌸 <span>🌼</span> <span>🌷</span></div><div class="finish-flag">🏁 MÅL</div><div class="start-flag">START</div><div class="obstacles-layer" id="obstaclesLayer"></div><div class="arena-horse" id="arenaHorse"></div><div id="arenaSfx"></div></div></div><div class="question-area"><div><div class="question-box"><span class="question-label" id="questionIntro">Vad blir...</span><div class="question" id="questionText">3 × 4 = ?</div><div class="answer-display" id="answerDisplay" aria-live="polite">?</div></div><div id="feedbackSlot" aria-live="polite"></div></div><div><div class="keypad" id="keypad"><button class="key" data-digit="1">1</button><button class="key" data-digit="2">2</button><button class="key" data-digit="3">3</button><button class="key" data-digit="4">4</button><button class="key" data-digit="5">5</button><button class="key" data-digit="6">6</button><button class="key" data-digit="7">7</button><button class="key" data-digit="8">8</button><button class="key" data-digit="9">9</button><button class="key delete" data-digit="delete" aria-label="Radera">⌫</button><button class="key" data-digit="0">0</button><button class="key enter" data-digit="enter">SVARA ↵</button></div><button class="btn green hidden" id="nextBtn" style="width:100%;margin-top:12px">Nästa hinder ➜</button><div class="helper" id="gameTip">⌨️ Du kan också skriva på tangentbordet och trycka Enter.</div></div></div></div></section>
 <section class="screen" id="screen-result" hidden><div class="panel result"><div class="giant" id="resultIcon">🏆</div><h1 id="resultTitle">Vilket fantastiskt lopp!</h1><p id="resultMessage">Du var jätteduktig!</p><div class="result-stats"><div class="stat"><big id="resultCorrect">0</big>Rätt svar</div><div class="stat"><big id="resultErrors">0</big>Rivningar</div><div class="stat"><big id="resultStars">0</big>Nya ⭐</div></div><div id="resultReview" class="helper hidden" style="text-align:left;max-width:550px;margin:0 auto 19px"></div><div class="buttons"><button class="btn" id="retryBtn">🔁 Hoppa igen</button><button class="btn secondary" data-go="stable">🐴 Mitt stall</button><button class="btn white" data-go="home">🏡 Hem</button></div></div></section>
-<section class="screen" id="screen-stable" hidden><div class="panel"><div class="heading"><h1>🐴 Mitt mysiga stall</h1><span class="eyebrow">⭐ <span id="stableStars">0</span> STJÄRNOR</span></div><p class="subhead">Stjärna får ett nytt utseende efter varje köp. Tillbehören låses upp i tur och ordning.</p><div class="stable-layout"><div><div class="stable-scene"><div id="stableHorse"></div><div class="stable-name" id="stableHorseName">Stjärna</div></div><h2 class="section-title" style="margin-top:22px">Din ponny</h2><div class="horse-grid" id="stableHorseChoices"></div></div><div><div class="small-panel"><h2>🛍️ Ponnyaffären</h2><p class="tiny muted">Köp nästa sak när du har tillräckligt många stjärnor!</p><div class="shop-grid" id="shopGrid"></div></div><div class="small-panel" style="margin-top:19px"><h2>🏅 Dina rosetter</h2><div id="achievements"></div></div></div></div><div style="text-align:center;margin-top:24px"><button class="btn" data-go="setup">🏇 Till nästa tävling!</button></div></div></section>
+<section class="screen" id="screen-stable" hidden><div class="panel"><div class="heading"><h1>🐴 Mitt mysiga stall</h1><span class="eyebrow">⭐ <span id="stableStars">0</span> STJÄRNOR</span></div><p class="subhead">Varje ponny har sin egen utrustning. Köpen låses upp i tur och ordning.</p><div class="stable-layout"><div><div class="stable-scene"><div id="stableHorse"></div><div class="stable-name" id="stableHorseName">Stjärna</div></div><h2 class="section-title" style="margin-top:22px">Välj ponny</h2><div class="horse-grid" id="stableHorseChoices"></div></div><div><div class="small-panel"><h2>🛍️ Ponnyaffären</h2><p class="tiny muted">Du handlar till vald ponny. Stjärnorna delar alla tre på.</p><div class="shop-grid" id="shopGrid"></div></div><div class="small-panel" style="margin-top:19px"><h2>🏅 Dina rosetter</h2><div id="achievements"></div></div></div></div><div style="text-align:center;margin-top:24px"><button class="btn" data-go="setup">🏇 Till nästa tävling!</button></div></div></section>
 </main><footer class="footer">Hästmatte · Stjärnas bildserie 🐴 · Sparar automatiskt på den här enheten · Inga konton eller annonser</footer></div><div id="toastArea" aria-live="polite"></div>
 <script>
 (()=>{'use strict';
-const HORSES=[{id:'stjarna',name:'Stjärna',desc:'Modig och glad'}];
+const HORSES=[{id:'stjarna',name:'Stjärna',desc:'Modig och glad'},{id:'blixten',name:'Blixten',desc:'Ljus man och blå utrustning'},{id:'pricken',name:'Pricken',desc:'Fläckig med rosa utrustning'}];
 const SHOP=[
 {id:'schabrak',name:'Lila schabrak',emoji:'💜',price:10},
 {id:'sadel',name:'Sadel',emoji:'🪑',price:20},
@@ -150,12 +150,19 @@ const SHOP=[
 {id:'krona',name:'Gyllene krona',emoji:'👑',price:100}
 ];
 const MODE={club:{name:'🎀 Klubbhoppning',length:5},local:{name:'🏅 Lokaltävling',length:8},championship:{name:'🏆 Mästerskap',length:10}};
-const STORAGE='hastmatte-v2';const defaults={stars:1000,horse:'stjarna',tables:[2,5,10],mode:'club',stage:0,owned:[],equipped:[],wins:{club:0,local:0,championship:0},totalCorrect:0,wrongFacts:{},sound:true};
+const STORAGE='hastmatte-v2';const defaults={stars:1000,horse:'stjarna',tables:[2,5,10],mode:'club',stage:0,ponyStages:{stjarna:0,blixten:0,pricken:0},owned:[],equipped:[],wins:{club:0,local:0,championship:0},totalCorrect:0,wrongFacts:{},sound:true};
 function load(){try{const x=JSON.parse(localStorage.getItem(STORAGE));if(!x||typeof x!=='object')return {...defaults};return {...defaults,...x,stars:Math.max(0,Number(x.stars)||0),tables:Array.isArray(x.tables)?x.tables.filter(n=>Number.isInteger(n)&&n>=1&&n<=10):defaults.tables,stage:Math.max(0,Math.min(10,Math.trunc(Number(x.stage)||0))),owned:Array.isArray(x.owned)?x.owned:[],equipped:Array.isArray(x.equipped)?x.equipped:[],wins:{...defaults.wins,...x.wins},wrongFacts:(x.wrongFacts&&typeof x.wrongFacts==='object')?x.wrongFacts:{}}}catch(e){return {...defaults}}}
 let state=load(),game=null,training=null,answer='',locked=false,screen='home',toastTimer=null,audioCtx=null,animTimer=null;
 if(state.mode==='practice'||!MODE[state.mode])state.mode='club';
-// Testversionen använder en enda ponny även om ett tidigare sparat val finns.
-state.horse='stjarna';
+// Bevara Stjärnas tidigare köp när spelet övergår till tre separata ponnyer.
+const safeStage=v=>Math.max(0,Math.min(10,Math.trunc(Number(v)||0)));
+if(!state.ponyStages||typeof state.ponyStages!=='object'){
+ state.ponyStages={stjarna:safeStage(state.stage),blixten:0,pricken:0};
+}else{
+ state.ponyStages={stjarna:safeStage(state.ponyStages.stjarna),blixten:safeStage(state.ponyStages.blixten),pricken:safeStage(state.ponyStages.pricken)};
+}
+if(!HORSES.some(h=>h.id===state.horse))state.horse='stjarna';
+try{localStorage.setItem(STORAGE,JSON.stringify(state))}catch(e){}
 // Testpåfyllning för alla tidigare sparade spel, genomförs en gång.
 try{if(localStorage.getItem('hastmatte-test-1000-v1')!=='yes'){
  state.stars=Math.max(1000,state.stars);
@@ -164,13 +171,15 @@ try{if(localStorage.getItem('hastmatte-test-1000-v1')!=='yes'){
 }}catch(e){state.stars=Math.max(1000,state.stars);}
 
 const $=id=>document.getElementById(id);function save(){try{localStorage.setItem(STORAGE,JSON.stringify(state))}catch(e){}}function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function currentStageName(){return state.stage===0?'Grundhäst':SHOP[state.stage-1].name}
-function stageSource(){
- const level=Math.max(0,Math.min(10,Number(state.stage)||0));
- return 'assets/stages-v2/stage'+String(level).padStart(2,'0')+'.webp?v=5';
+function ponyStage(id=state.horse){return state.ponyStages[id]||0}
+function currentStageName(id=state.horse){const n=ponyStage(id);return n===0?'Grundhäst':SHOP[n-1].name}
+function stageSource(id=state.horse){
+ const level=String(ponyStage(id)).padStart(2,'0');
+ return id==='stjarna'?'assets/stages-v2/stage'+level+'.webp?v=5':'assets/'+id+'/stage'+level+'.webp?v=7';
 }
-function horseSVG(id,accessories=true){
- return `<span class="pony-wrap"><img class="horse-svg" src="${stageSource()}" alt="Stjärna, ${esc(currentStageName())}" draggable="false"></span>`;
+function horseSVG(id=state.horse,accessories=true){
+ const h=HORSES.find(h=>h.id===id)||HORSES[0];
+ return `<span class="pony-wrap"><img class="horse-svg" src="${stageSource(h.id)}" alt="${esc(h.name)}, ${esc(currentStageName(h.id))}" draggable="false"></span>`;
 }
 function renderTop(){$('starCount').textContent=state.stars;$('stableStars').textContent=state.stars;$('soundBtn').textContent=state.sound?'🔊':'🔇';$('soundBtn').setAttribute('aria-label',state.sound?'Stäng av ljud':'Sätt på ljud');$('heroHorse').innerHTML=horseSVG(state.horse);}
 function toast(message){const area=$('toastArea');area.innerHTML=`<div class="toast">${esc(message)}</div>`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{area.innerHTML=''},2700)}
@@ -180,10 +189,10 @@ function renderSetup(){renderHorseChoices('horseChoices');$('tableChoices').inne
 function renderStable(){
  renderTop();
  $('stableHorse').innerHTML=horseSVG(state.horse);
- $('stableHorseName').textContent='Stjärna – nivå '+state.stage+' av 10';
+ $('stableHorseName').textContent=HORSES.find(h=>h.id===state.horse).name+' – nivå '+ponyStage()+' av 10';
  renderHorseChoices('stableHorseChoices');
  $('shopGrid').innerHTML=SHOP.map((item,i)=>{
-  const bought=i<state.stage, next=i===state.stage, affordable=state.stars>=item.price;
+  const bought=i<ponyStage(), next=i===ponyStage(), affordable=state.stars>=item.price;
   const disabled=bought||!next||!affordable;
   return `<div class="shop-item ${next?'next-purchase':''}">
    <span class="shop-emoji">${item.emoji}</span>
@@ -192,7 +201,7 @@ function renderStable(){
    <button class="btn ${next?'yellow':'secondary'}" data-item="${item.id}" ${disabled?'disabled':''}>${bought?'Köpt ✓':next?'Köp':'🔒 Låst'}</button>
   </div>`;
  }).join('');
- $('achievements').innerHTML=`<div class="achieve"><span>🎒 Utrustningsnivå</span><span>${state.stage} / 10</span></div>`+
+ $('achievements').innerHTML=`<div class="achieve"><span>🎒 Utrustningsnivå</span><span>${ponyStage()} / 10</span></div>`+
  [['club','🎀','Klubbhoppning'],['local','🥈','Lokaltävling'],['championship','🏆','Mästerskap']].map(([id,emoji,label])=>`<div class="achieve"><span>${emoji} ${label}</span><span>${state.wins[id]||0} vinster</span></div>`).join('')+
  `<div class="achieve"><span>✨ Rätt svar totalt</span><span>${state.totalCorrect}</span></div>`;
 }
@@ -273,10 +282,10 @@ function nextQuestion(){if(!game||!locked)return;game.index++;if(game.index>=gam
 function finishGame(){const g=game;game=null;let won=g.mode!=='practice'&&g.errors===0;let bonus=won?(g.mode==='championship'?20:g.mode==='local'?12:7):g.mode==='practice'?3:0;state.stars+=bonus;g.earned+=bonus;if(won)state.wins[g.mode]=(state.wins[g.mode]||0)+1;save();renderTop();nav('result');$('resultIcon').textContent=won?(g.mode==='championship'?'🏆':'🎀'):(g.mode==='practice'?'🌟':'🐴');$('resultTitle').textContent=won?'Felfritt lopp!':g.mode==='practice'?'Strålande träning!':'Bra kämpat!';$('resultMessage').textContent=won?'Vilken stjärnryttare! Du har vunnit en rosett!':g.mode==='practice'?'Nu är du ännu bättre på gångertabellen!':'Nästan! Träna på de svåra talen och försök igen för att vinna rosetten.';$('resultCorrect').textContent=g.correct+' / '+g.questions.length;$('resultErrors').textContent=g.errors;$('resultStars').textContent='+'+g.earned;const errors=[...new Set(g.mistakes)];$('resultReview').classList.toggle('hidden',errors.length===0);$('resultReview').innerHTML=errors.length?`🧠 Öva lite extra på: <strong>${errors.map(esc).join(' · ')}</strong>`:'';$('progressFill').style.width='100%';$('progressBar').setAttribute('aria-valuenow','100');if(won)tone(true)}
 function shopAction(id){
  const i=SHOP.findIndex(item=>item.id===id);
- if(i<0||i!==state.stage||state.stars<SHOP[i].price)return;
+ if(i<0||i!==ponyStage()||state.stars<SHOP[i].price)return;
  const item=SHOP[i];
  state.stars-=item.price;
- state.stage=i+1;
+ state.ponyStages[state.horse]=i+1;
  save();
  toast(item.emoji+' '+item.name+' köpt!');
  renderStable();
