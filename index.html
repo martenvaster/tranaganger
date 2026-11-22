@@ -129,6 +129,14 @@
  <div class="training-options" id="trainingOptions" role="group" aria-label="Fem svarsalternativ"></div>
  <div class="training-note" id="trainingFeedback" aria-live="polite"></div>
  <button class="btn green hidden" id="trainingNext">Nästa fråga ➜</button>
+ <div class="hidden" id="trainingDone" style="padding:18px 0 8px">
+  <h2>🌟 Träningsrundan är klar!</h2>
+  <p class="subhead">Bra jobbat! Du kan öva på samma tal en gång till eller gå vidare till hopptävlingen.</p>
+  <div class="buttons">
+   <button class="btn secondary" id="trainingRestart">🔁 Träna igen</button>
+   <button class="btn green" id="trainingRace">🏇 Starta tävlingen!</button>
+  </div>
+ </div>
  </div></div></section>
 <section class="screen" id="screen-game" hidden><div class="panel"><div class="heading"><div><h1 id="gameTitle">🎀 Klubbhoppning</h1><div class="muted" id="gameSubtitle" style="font-weight:800">Du klarar det här!</div></div><button class="mini-btn" id="leaveGame">✕ Avsluta</button></div><div class="progress-label"><span id="progressText">Hinder 1 av 5</span><span id="scoreText">⭐ 0 rätt</span></div><div class="progress-bar" role="progressbar" aria-label="Loppets framsteg" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div><div class="arena" aria-label="S-formad hoppbana med alla hinder synliga"><div class="arena-inner"><svg class="course-map" viewBox="0 0 720 360" preserveAspectRatio="none" aria-hidden="true"><path class="course-border" d="M 68 278 L 600 278 C 690 278 686 173 600 173 L 132 173 C 45 173 45 70 132 70 L 626 70"/><path class="course-path" id="coursePath" d="M 68 278 L 600 278 C 690 278 686 173 600 173 L 132 173 C 45 173 45 70 132 70 L 626 70"/></svg><div class="course-decor" aria-hidden="true">🌸 <span>🌼</span> <span>🌷</span></div><div class="finish-flag">🏁 MÅL</div><div class="start-flag">START</div><div class="obstacles-layer" id="obstaclesLayer"></div><div class="arena-horse" id="arenaHorse"></div><div id="arenaSfx"></div></div></div><div class="question-area"><div><div class="question-box"><span class="question-label" id="questionIntro">Vad blir...</span><div class="question" id="questionText">3 × 4 = ?</div><div class="answer-display" id="answerDisplay" aria-live="polite">?</div></div><div id="feedbackSlot" aria-live="polite"></div></div><div><div class="keypad" id="keypad"><button class="key" data-digit="1">1</button><button class="key" data-digit="2">2</button><button class="key" data-digit="3">3</button><button class="key" data-digit="4">4</button><button class="key" data-digit="5">5</button><button class="key" data-digit="6">6</button><button class="key" data-digit="7">7</button><button class="key" data-digit="8">8</button><button class="key" data-digit="9">9</button><button class="key delete" data-digit="delete" aria-label="Radera">⌫</button><button class="key" data-digit="0">0</button><button class="key enter" data-digit="enter">SVARA ↵</button></div><button class="btn green hidden" id="nextBtn" style="width:100%;margin-top:12px">Nästa hinder ➜</button><div class="helper" id="gameTip">⌨️ Du kan också skriva på tangentbordet och trycka Enter.</div></div></div></div></section>
 <section class="screen" id="screen-result" hidden><div class="panel result"><div class="giant" id="resultIcon">🏆</div><h1 id="resultTitle">Vilket fantastiskt lopp!</h1><p id="resultMessage">Du var jätteduktig!</p><div class="result-stats"><div class="stat"><big id="resultCorrect">0</big>Rätt svar</div><div class="stat"><big id="resultErrors">0</big>Rivningar</div><div class="stat"><big id="resultStars">0</big>Nya ⭐</div></div><div id="resultReview" class="helper hidden" style="text-align:left;max-width:550px;margin:0 auto 19px"></div><div class="buttons"><button class="btn" id="retryBtn">🔁 Hoppa igen</button><button class="btn secondary" data-go="stable">🐴 Mitt stall</button><button class="btn white" data-go="home">🏡 Hem</button></div></div></section>
@@ -222,25 +230,31 @@ if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){placeHorse(end
 
 // Felaktiga alternativ hålls minst fyra enheter från det rätta svaret och från varandra.
 function trainingChoices(correct){
-  const minGap=4;
-  const pool=Array.from({length:150},(_,i)=>i+1).filter(v=>Math.abs(v-correct)>=minGap);
-  shuffle(pool);
-  const picked=[correct];
-  for(const value of pool){
-    if(picked.every(existing=>Math.abs(value-existing)>=minGap))picked.push(value);
-    if(picked.length===5)break;
+  // Heltal inom ±10 %. För små produkter utökas intervallet bara
+  // så mycket som krävs för fem olika positiva svarsalternativ.
+  let low=Math.max(1,Math.ceil(correct*0.9-1e-9));
+  let high=Math.floor(correct*1.1+1e-9);
+  while(high-low+1<5){
+    low=Math.max(1,low-1);
+    high++;
   }
-  // Detta räcker alltid med intervallet 1..150 och fyra enheters avstånd.
-  return shuffle(picked);
+  const choices=Array.from({length:high-low+1},(_,i)=>low+i);
+  shuffle(choices);
+  const wrong=choices.filter(n=>n!==correct).slice(0,4);
+  return shuffle([correct,...wrong]);
 }
 function beginTraining(){
   if(!state.tables.length){toast('Välj minst en gångertabell!');return}
-  training={questions:chooseQuestions(state.tables,MODE[state.mode].length),index:0,solved:false,wrongAttempts:0};
+  training={questions:chooseQuestions(state.tables,MODE[state.mode].length),index:0,solved:false,wrongAttempts:0,completed:false};
   nav('training');showTrainingQuestion();
 }
 function showTrainingQuestion(){
   if(!training)return;
   training.solved=false;
+  training.completed=false;
+  $('trainingQuestion').classList.remove('hidden');
+  $('trainingOptions').classList.remove('hidden');
+  $('trainingDone').classList.add('hidden');
   const q=training.questions[training.index];
   $('trainingProgress').textContent='Fråga '+(training.index+1)+' av '+training.questions.length;
   $('trainingQuestion').textContent=q.a+' × '+q.b+' = ?';
@@ -262,13 +276,31 @@ function selectTrainingAnswer(value,button){
   training.solved=true;tone(true);
   $('trainingOptions').querySelectorAll('button').forEach(b=>{b.disabled=true;if(Number(b.dataset.trainingAnswer)===value)b.classList.add('correct')});
   $('trainingFeedback').textContent='Rätt! Bra jobbat! ⭐';
-  $('trainingNext').textContent=training.index===training.questions.length-1?'🏇 Starta tävlingen!':'Nästa fråga ➜';
+  $('trainingNext').textContent=training.index===training.questions.length-1?'Avsluta träningen ➜':'Nästa fråga ➜';
   $('trainingNext').classList.remove('hidden');
 }
 function advanceTraining(){
-  if(!training||!training.solved)return;
+  if(!training||!training.solved||training.completed)return;
   training.index++;
   if(training.index<training.questions.length){showTrainingQuestion();return}
+  training.completed=true;
+  $('trainingProgress').textContent=training.questions.length+' av '+training.questions.length+' frågor klara!';
+  $('trainingQuestion').classList.add('hidden');
+  $('trainingOptions').classList.add('hidden');
+  $('trainingFeedback').textContent='';
+  $('trainingNext').classList.add('hidden');
+  $('trainingDone').classList.remove('hidden');
+}
+function restartTraining(){
+  if(!training||!training.completed)return;
+  training.index=0;
+  training.solved=false;
+  training.completed=false;
+  training.wrongAttempts=0;
+  showTrainingQuestion();
+}
+function startTrainedCompetition(){
+  if(!training||!training.completed)return;
   const trainedQuestions=training.questions.map(q=>({...q}));
   training=null;
   startGame(trainedQuestions);
@@ -292,7 +324,7 @@ function shopAction(id){
 }
 function resetSame(){beginTraining()}
 document.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;if(t.dataset.nav)nav(t.dataset.nav);else if(t.dataset.go)nav(t.dataset.go);else if(t.dataset.horse){state.horse=t.dataset.horse;save();renderTop();if(screen==='setup')renderSetup();else renderStable()}else if(t.dataset.table){const n=Number(t.dataset.table);state.tables=state.tables.includes(n)?state.tables.filter(x=>x!==n):[...state.tables,n].sort((a,b)=>a-b);save();renderSetup()}else if(t.dataset.mode){state.mode=t.dataset.mode;save();renderSetup()}else if(t.dataset.trainingAnswer)selectTrainingAnswer(Number(t.dataset.trainingAnswer),t);else if(t.dataset.digit)inputDigit(t.dataset.digit);else if(t.dataset.item)shopAction(t.dataset.item)});
-$('chooseAll').addEventListener('click',()=>{state.tables=Array.from({length:10},(_,i)=>i+1);save();renderSetup()});$('startBtn').addEventListener('click',beginTraining);$('trainingNext').addEventListener('click',advanceTraining);$('leaveTraining').addEventListener('click',()=>{training=null;nav('setup')});$('nextBtn').addEventListener('click',nextQuestion);$('leaveGame').addEventListener('click',()=>nav('setup'));$('retryBtn').addEventListener('click',resetSame);$('soundBtn').addEventListener('click',()=>{state.sound=!state.sound;save();renderTop()});document.addEventListener('keydown',e=>{if(screen!=='game'||e.altKey||e.metaKey||e.ctrlKey)return;if(e.key>='0'&&e.key<='9'){e.preventDefault();inputDigit(e.key)}else if(e.key==='Backspace'){e.preventDefault();inputDigit('delete')}else if(e.key==='Enter'){e.preventDefault();if(locked)nextQuestion();else inputDigit('enter')}});
+$('chooseAll').addEventListener('click',()=>{state.tables=Array.from({length:10},(_,i)=>i+1);save();renderSetup()});$('startBtn').addEventListener('click',beginTraining);$('trainingNext').addEventListener('click',advanceTraining);$('trainingRestart').addEventListener('click',restartTraining);$('trainingRace').addEventListener('click',startTrainedCompetition);$('leaveTraining').addEventListener('click',()=>{training=null;nav('setup')});$('nextBtn').addEventListener('click',nextQuestion);$('leaveGame').addEventListener('click',()=>nav('setup'));$('retryBtn').addEventListener('click',resetSame);$('soundBtn').addEventListener('click',()=>{state.sound=!state.sound;save();renderTop()});document.addEventListener('keydown',e=>{if(screen!=='game'||e.altKey||e.metaKey||e.ctrlKey)return;if(e.key>='0'&&e.key<='9'){e.preventDefault();inputDigit(e.key)}else if(e.key==='Backspace'){e.preventDefault();inputDigit('delete')}else if(e.key==='Enter'){e.preventDefault();if(locked)nextQuestion();else inputDigit('enter')}});
 renderTop();renderSetup();})();
 </script>
 </body>
