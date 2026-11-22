@@ -110,6 +110,8 @@
 .training-note{font-size:17px;font-weight:800;min-height:30px;margin:12px}
 .training-progress{font-weight:900;background:#fff0c3;border:2px solid var(--ink);border-radius:30px;display:inline-block;padding:7px 19px}
 @media(max-width:530px){.training-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.training-option{min-height:60px}}
+.shop-item.next-purchase{outline:3px dashed #ab83d9;outline-offset:2px}
+.shop-item button:disabled{opacity:.55;cursor:not-allowed}
 </style>
 </head>
 <body>
@@ -130,125 +132,40 @@
  </div></div></section>
 <section class="screen" id="screen-game" hidden><div class="panel"><div class="heading"><div><h1 id="gameTitle">🎀 Klubbhoppning</h1><div class="muted" id="gameSubtitle" style="font-weight:800">Du klarar det här!</div></div><button class="mini-btn" id="leaveGame">✕ Avsluta</button></div><div class="progress-label"><span id="progressText">Hinder 1 av 5</span><span id="scoreText">⭐ 0 rätt</span></div><div class="progress-bar" role="progressbar" aria-label="Loppets framsteg" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div><div class="arena" aria-label="S-formad hoppbana med alla hinder synliga"><div class="arena-inner"><svg class="course-map" viewBox="0 0 720 360" preserveAspectRatio="none" aria-hidden="true"><path class="course-border" d="M 68 278 L 600 278 C 690 278 686 173 600 173 L 132 173 C 45 173 45 70 132 70 L 626 70"/><path class="course-path" id="coursePath" d="M 68 278 L 600 278 C 690 278 686 173 600 173 L 132 173 C 45 173 45 70 132 70 L 626 70"/></svg><div class="course-decor" aria-hidden="true">🌸 <span>🌼</span> <span>🌷</span></div><div class="finish-flag">🏁 MÅL</div><div class="start-flag">START</div><div class="obstacles-layer" id="obstaclesLayer"></div><div class="arena-horse" id="arenaHorse"></div><div id="arenaSfx"></div></div></div><div class="question-area"><div><div class="question-box"><span class="question-label" id="questionIntro">Vad blir...</span><div class="question" id="questionText">3 × 4 = ?</div><div class="answer-display" id="answerDisplay" aria-live="polite">?</div></div><div id="feedbackSlot" aria-live="polite"></div></div><div><div class="keypad" id="keypad"><button class="key" data-digit="1">1</button><button class="key" data-digit="2">2</button><button class="key" data-digit="3">3</button><button class="key" data-digit="4">4</button><button class="key" data-digit="5">5</button><button class="key" data-digit="6">6</button><button class="key" data-digit="7">7</button><button class="key" data-digit="8">8</button><button class="key" data-digit="9">9</button><button class="key delete" data-digit="delete" aria-label="Radera">⌫</button><button class="key" data-digit="0">0</button><button class="key enter" data-digit="enter">SVARA ↵</button></div><button class="btn green hidden" id="nextBtn" style="width:100%;margin-top:12px">Nästa hinder ➜</button><div class="helper" id="gameTip">⌨️ Du kan också skriva på tangentbordet och trycka Enter.</div></div></div></div></section>
 <section class="screen" id="screen-result" hidden><div class="panel result"><div class="giant" id="resultIcon">🏆</div><h1 id="resultTitle">Vilket fantastiskt lopp!</h1><p id="resultMessage">Du var jätteduktig!</p><div class="result-stats"><div class="stat"><big id="resultCorrect">0</big>Rätt svar</div><div class="stat"><big id="resultErrors">0</big>Rivningar</div><div class="stat"><big id="resultStars">0</big>Nya ⭐</div></div><div id="resultReview" class="helper hidden" style="text-align:left;max-width:550px;margin:0 auto 19px"></div><div class="buttons"><button class="btn" id="retryBtn">🔁 Hoppa igen</button><button class="btn secondary" data-go="stable">🐴 Mitt stall</button><button class="btn white" data-go="home">🏡 Hem</button></div></div></section>
-<section class="screen" id="screen-stable" hidden><div class="panel"><div class="heading"><h1>🐴 Mitt mysiga stall</h1><span class="eyebrow">⭐ <span id="stableStars">0</span> STJÄRNOR</span></div><p class="subhead">Här bor dina ponnyer! Tjäna stjärnor på hoppbanan och välj fin utrustning.</p><div class="stable-layout"><div><div class="stable-scene"><div id="stableHorse"></div><div class="stable-name" id="stableHorseName">Stjärna</div></div><h2 class="section-title" style="margin-top:22px">Byt ponny</h2><div class="horse-grid" id="stableHorseChoices"></div></div><div><div class="small-panel"><h2>🛍️ Ponnyaffären</h2><p class="tiny muted">Köp utrustning en gång, använd den hur ofta du vill!</p><div class="shop-grid" id="shopGrid"></div></div><div class="small-panel" style="margin-top:19px"><h2>🏅 Dina rosetter</h2><div id="achievements"></div></div></div></div><div style="text-align:center;margin-top:24px"><button class="btn" data-go="setup">🏇 Till nästa tävling!</button></div></div></section>
-</main><footer class="footer">Hästmatte · S-banan V6 🐴 · Sparar automatiskt på den här enheten · Inga konton eller annonser</footer></div><div id="toastArea" aria-live="polite"></div>
+<section class="screen" id="screen-stable" hidden><div class="panel"><div class="heading"><h1>🐴 Mitt mysiga stall</h1><span class="eyebrow">⭐ <span id="stableStars">0</span> STJÄRNOR</span></div><p class="subhead">Stjärna får ett nytt utseende efter varje köp. Tillbehören låses upp i tur och ordning.</p><div class="stable-layout"><div><div class="stable-scene"><div id="stableHorse"></div><div class="stable-name" id="stableHorseName">Stjärna</div></div><h2 class="section-title" style="margin-top:22px">Din ponny</h2><div class="horse-grid" id="stableHorseChoices"></div></div><div><div class="small-panel"><h2>🛍️ Ponnyaffären</h2><p class="tiny muted">Köp nästa sak när du har tillräckligt många stjärnor!</p><div class="shop-grid" id="shopGrid"></div></div><div class="small-panel" style="margin-top:19px"><h2>🏅 Dina rosetter</h2><div id="achievements"></div></div></div></div><div style="text-align:center;margin-top:24px"><button class="btn" data-go="setup">🏇 Till nästa tävling!</button></div></div></section>
+</main><footer class="footer">Hästmatte · Stjärnas bildserie 🐴 · Sparar automatiskt på den här enheten · Inga konton eller annonser</footer></div><div id="toastArea" aria-live="polite"></div>
+<script src="assets/pony-stages-0.js?v=2"></script>
+<script src="assets/pony-stages-1.js?v=2"></script>
+<script src="assets/pony-stages-2.js?v=2"></script>
 <script>
 (()=>{'use strict';
-const HORSES=[{id:'stjarna',name:'Stjärna',color:'#c98252',mane:'#633b40',spot:false,desc:'Modig och glad'},{id:'blixten',name:'Blixten',color:'#f3cd8b',mane:'#9b623d',spot:false,desc:'Snabb som vinden'},{id:'pricken',name:'Pricken',color:'#e9e5e0',mane:'#57515b',spot:true,desc:'Busig och sprallig'}];
+const HORSES=[{id:'stjarna',name:'Stjärna',desc:'Modig och glad'}];
 const SHOP=[
-{id:'saddle',name:'Havsblå sadel',emoji:'🩵',price:20,category:'Sadel',hue:204},
-{id:'saddle_rose',name:'Hallonrosa sadel',emoji:'🩷',price:28,category:'Sadel',hue:335},
-{id:'saddle_ink',name:'Midnattsblå sadel',emoji:'💙',price:33,category:'Sadel',hue:230},
-{id:'blanket',name:'Lila schabrak',emoji:'💜',price:30,category:'Schabrak',hue:277},
-{id:'pad_mint',name:'Mintgrönt schabrak',emoji:'🍀',price:25,category:'Schabrak',hue:155},
-{id:'pad_gold',name:'Solgult schabrak',emoji:'🌞',price:32,category:'Schabrak',hue:45},
-{id:'rug_lilac',name:'Lila hästtäcke',emoji:'🦄',price:38,category:'Hästtäcke',color:'#ad81e6',trim:'#ffc0de'},
-{id:'rug_rose',name:'Rosa hästtäcke',emoji:'🌷',price:42,category:'Hästtäcke',color:'#e976b2',trim:'#ffe0af'},
-{id:'rug_navy',name:'Blått hästtäcke',emoji:'🌌',price:46,category:'Hästtäcke',color:'#4277c5',trim:'#aee6ff'},
-{id:'bow',name:'Rosa rosett',emoji:'🎀',price:12,category:'Dekoration'},
-{id:'crown',name:'Gyllene krona',emoji:'👑',price:45,category:'Dekoration'},
-{id:'flower',name:'Blomma i manen',emoji:'🌸',price:18,category:'Dekoration'},
-{id:'starclip',name:'Stjärnspänne',emoji:'🌟',price:24,category:'Dekoration'}
+{id:'schabrak',name:'Lila schabrak',emoji:'💜',price:10},
+{id:'sadel',name:'Sadel',emoji:'🪑',price:20},
+{id:'rosett',name:'Rosa rosett',emoji:'🎀',price:30},
+{id:'trans',name:'Träns',emoji:'🐴',price:40},
+{id:'blommor',name:'Blommor i manen',emoji:'🌸',price:50},
+{id:'pannband',name:'Pannband med stenar',emoji:'💎',price:60},
+{id:'benskydd',name:'Benskydd',emoji:'✨',price:70},
+{id:'stigbyglar',name:'Rosa stigbyglar',emoji:'🩷',price:80},
+{id:'bringa',name:'Bringa med hjärtsmycke',emoji:'💖',price:90},
+{id:'krona',name:'Gyllene krona',emoji:'👑',price:100}
 ];
 const MODE={club:{name:'🎀 Klubbhoppning',length:5},local:{name:'🏅 Lokaltävling',length:8},championship:{name:'🏆 Mästerskap',length:10}};
-const STORAGE='hastmatte-v2';const defaults={stars:0,horse:'stjarna',tables:[2,5,10],mode:'club',owned:[],equipped:[],wins:{club:0,local:0,championship:0},totalCorrect:0,wrongFacts:{},sound:true};
-function load(){try{const x=JSON.parse(localStorage.getItem(STORAGE));if(!x||typeof x!=='object')return {...defaults};return {...defaults,...x,stars:Math.max(0,Number(x.stars)||0),tables:Array.isArray(x.tables)?x.tables.filter(n=>Number.isInteger(n)&&n>=1&&n<=10):defaults.tables,owned:Array.isArray(x.owned)?x.owned:[],equipped:Array.isArray(x.equipped)?x.equipped:[],wins:{...defaults.wins,...x.wins},wrongFacts:(x.wrongFacts&&typeof x.wrongFacts==='object')?x.wrongFacts:{}}}catch(e){return {...defaults}}}
+const STORAGE='hastmatte-v2';const defaults={stars:0,horse:'stjarna',tables:[2,5,10],mode:'club',stage:0,owned:[],equipped:[],wins:{club:0,local:0,championship:0},totalCorrect:0,wrongFacts:{},sound:true};
+function load(){try{const x=JSON.parse(localStorage.getItem(STORAGE));if(!x||typeof x!=='object')return {...defaults};return {...defaults,...x,stars:Math.max(0,Number(x.stars)||0),tables:Array.isArray(x.tables)?x.tables.filter(n=>Number.isInteger(n)&&n>=1&&n<=10):defaults.tables,stage:Math.max(0,Math.min(10,Math.trunc(Number(x.stage)||0))),owned:Array.isArray(x.owned)?x.owned:[],equipped:Array.isArray(x.equipped)?x.equipped:[],wins:{...defaults.wins,...x.wins},wrongFacts:(x.wrongFacts&&typeof x.wrongFacts==='object')?x.wrongFacts:{}}}catch(e){return {...defaults}}}
 let state=load(),game=null,training=null,answer='',locked=false,screen='home',toastTimer=null,audioCtx=null,animTimer=null;
 if(state.mode==='practice'||!MODE[state.mode])state.mode='club';
 const $=id=>document.getElementById(id);function save(){try{localStorage.setItem(STORAGE,JSON.stringify(state))}catch(e){}}function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-const GEAR_FIT={
- stjarna:{w:747,h:741,head:[590,80],bow:[523,143],flower:[424,114],rug:'M224 379 Q236 345 270 329 L333 307 Q354 307 372 319 L397 311 Q425 316 437 341 L459 384 Q450 410 434 425 L422 463 Q386 486 341 490 L303 494 Q259 486 237 462 Q213 447 217 415 Z', straps:[[396,418],[420,454]],emblem:[308,427]},
- blixten:{w:772,h:747,head:[623,79],bow:[567,133],flower:[435,91],rug:'M275 385 Q278 350 310 334 L369 302 Q393 290 422 312 L444 306 Q464 318 470 345 L482 386 Q474 415 454 433 L444 471 Q392 495 343 491 L307 490 Q280 468 269 448 Z',straps:[[424,408],[442,451]],emblem:[342,424]},
- pricken:{w:749,h:734,head:[595,75],bow:[528,129],flower:[442,99],rug:'M237 388 Q248 351 282 333 L342 304 Q371 291 396 312 L416 305 Q436 323 449 347 L457 390 Q446 415 432 435 L419 469 Q379 484 336 480 L282 482 Q251 464 238 435 Z',straps:[[398,404],[418,451]],emblem:[306,421]}
-};
+function currentStageName(){return state.stage===0?'Grundhäst':SHOP[state.stage-1].name}
+function stageSource(){
+ const stage=window.PONY_STAGES;
+ return Array.isArray(stage)&&stage[state.stage]?stage[state.stage]:'assets/stjarna.png';
+}
 function horseSVG(id,accessories=true){
- const h=HORSES.find(x=>x.id===id)||HORSES[0],f=GEAR_FIT[h.id];
- const equipped=accessories?state.equipped.filter(id=>state.owned.includes(id)):[];
- const selected=category=>SHOP.find(it=>it.category===category&&equipped.includes(it.id));
- const rug=selected('Hästtäcke');
- const saddle=rug?null:selected('Sadel'),pad=rug?null:selected('Schabrak');
- const has=id=>equipped.includes(id);
- let layers='';
- if(rug){
-   const color=rug.color,trim=rug.trim,[ex,ey]=f.emblem,[[sx,sy],[bx,by]]=f.straps;
-   layers+=`<g class="gear-rug">
-   <path d="${f.rug}" fill="${color}" stroke="#4f354a" stroke-width="7" stroke-linejoin="round"/>
-   <path d="${f.rug}" fill="none" stroke="${trim}" stroke-width="11" stroke-linejoin="round" opacity=".9"/>
-   <path d="M${ex-54} ${ey-42} Q${ex} ${ey-78} ${ex+55} ${ey-48}" stroke="#fff" stroke-opacity=".38" stroke-width="12" fill="none" stroke-linecap="round"/>
-   <path d="M${sx-13} ${sy-35} L${sx+10} ${sy+16} Q${sx+28} ${sy+20} ${bx} ${by}" stroke="#513349" stroke-width="15" fill="none" stroke-linecap="round"/>
-   <path d="M${sx-13} ${sy-35} L${sx+10} ${sy+16} Q${sx+28} ${sy+20} ${bx} ${by}" stroke="${trim}" stroke-width="9" fill="none" stroke-linecap="round"/>
-   <rect x="${sx-7}" y="${sy+9}" width="24" height="18" rx="4" transform="rotate(-9 ${sx} ${sy})" fill="#ffd776" stroke="#664253" stroke-width="4"/>
-   <path d="M${ex-14} ${ey-4} q-27 -23 -29 3 q-3 19 29 38 q33 -19 29 -38 q-3 -26 -29 -3" fill="${trim}" stroke="#765270" stroke-width="4" opacity=".95"/>
-   </g>`;
- }
- if(has('bow')){
-   const [x,y]=f.bow;layers+=`<g transform="translate(${x} ${y}) rotate(-12)"><path d="M-1 0 C-39 -40 -48 -6 -33 17 Q-20 32 1 8 Q28 35 42 8 Q46 -33 -1 0Z" fill="#ff75aa" stroke="#542d50" stroke-width="6" stroke-linejoin="round"/><path d="M-5 9 L-20 41 L1 32 L17 45 L11 10" fill="#ff9ac3" stroke="#542d50" stroke-width="5"/><ellipse rx="10" ry="11" fill="#ffe081" stroke="#542d50" stroke-width="4"/><path d="M-30 0 Q-20 -5 -13 3 M16 4 Q24 -5 34 3" stroke="#fff0f8" stroke-width="5" fill="none" stroke-linecap="round"/></g>`;
- }
- if(has('crown')){
-  const [x,y]=f.head;layers+=`<g transform="translate(${x} ${y}) rotate(-13)"><path d="M-42 13 L-51 -35 L-26 -16 L0 -55 L25 -14 L48 -38 L41 13 Z" fill="#ffcf48" stroke="#643849" stroke-width="6" stroke-linejoin="round"/><rect x="-44" y="6" width="88" height="17" rx="5" fill="#ffeb83" stroke="#643849" stroke-width="5"/><circle cx="-1" cy="-9" r="9" fill="#f77aab" stroke="#643849" stroke-width="3"/><circle cx="-27" cy="-10" r="5" fill="#8dcde8"/><circle cx="27" cy="-10" r="5" fill="#8dcde8"/><path d="M-27 12 L28 12" stroke="#fff9cc" stroke-width="5" stroke-linecap="round"/></g>`;
- }
- if(has('flower')||has('starclip')){
-  const [x,y]=f.flower;
-  if(has('flower'))layers+=`<g transform="translate(${x} ${y})"><g fill="#ff8fc6" stroke="#794f75" stroke-width="3">${[0,72,144,216,288].map(a=>`<ellipse cx="0" cy="-17" rx="11" ry="20" transform="rotate(${a})"/>`).join('')}</g><circle r="10" fill="#ffe36a" stroke="#794f75" stroke-width="3"/></g>`;
-  if(has('starclip'))layers+=`<path d="M${x+50} ${y-39} l9 21 23 1-18 14 7 22-21-13-20 13 7-22-18-14 23-1Z" fill="#ffd75c" stroke="#65435c" stroke-width="5" stroke-linejoin="round"/>`;
- }
- const source=`assets/${h.id}.png`;
- if(saddle||pad)requestAnimationFrame(syncPonyImages);
- return `<span class="pony-wrap"><img class="horse-svg" data-pony="${h.id}" data-saddle-hue="${saddle?saddle.hue:''}" data-pad-hue="${pad?pad.hue:''}" src="${source}" alt="${esc(h.name)}, en glad tecknad ponny i språng" draggable="false">${layers?`<svg class="pony-gear" viewBox="0 0 ${f.w} ${f.h}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${layers}</svg>`:''}</span>`;
+ return `<span class="pony-wrap"><img class="horse-svg" src="${stageSource()}" alt="Stjärna, ${esc(currentStageName())}" draggable="false"></span>`;
 }
-// Originalillustrationerna lämnas orörda. Canvas skapar bildvarianter
-// med originalbildens ljus, skuggor och konturer bevarade.
-const ponyVariantCache=new Map(),ponyVariantTasks=new Map();
-const ponyRegions={
-stjarna:{saddle:[[258,324],[281,308],[313,326],[350,315],[395,312],[392,347],[356,362],[306,368],[272,353]],blanket:[[232,391],[261,355],[304,342],[353,348],[414,352],[416,408],[394,449],[338,464],[267,462],[238,440]]},
-blixten:{saddle:[[314,332],[323,303],[356,298],[385,294],[401,323],[379,349],[346,361],[318,351]],blanket:[[278,406],[292,367],[338,342],[394,329],[444,335],[447,403],[421,448],[341,470],[288,458]]},
-pricken:{saddle:[[282,333],[294,310],[326,319],[359,306],[389,300],[400,338],[355,364],[301,361]],blanket:[[252,394],[269,353],[310,333],[372,324],[416,325],[421,405],[392,450],[324,467],[255,451]]}
-};
-function renderPonyVariant(base,id,saddleHue,padHue){
- const canvas=document.createElement('canvas');canvas.width=base.naturalWidth;canvas.height=base.naturalHeight;
- const ctx=canvas.getContext('2d',{willReadFrequently:true});ctx.drawImage(base,0,0);
- const image=ctx.getImageData(0,0,canvas.width,canvas.height),p=image.data;
- const mask=document.createElement('canvas');mask.width=canvas.width;mask.height=canvas.height;const mc=mask.getContext('2d',{willReadFrequently:true});
- function changeRegion(points,targetHue,targetSat){
-   mc.clearRect(0,0,canvas.width,canvas.height);mc.fillStyle='#fff';mc.beginPath();
-   points.forEach(([x,y],i)=>i?mc.lineTo(x,y):mc.moveTo(x,y));mc.closePath();mc.fill();
-   const m=mc.getImageData(0,0,canvas.width,canvas.height).data;
-   for(let j=0;j<p.length;j+=4){
-     if(!m[j+3]||p[j+3]<10)continue;
-     const r=p[j]/255,g=p[j+1]/255,b=p[j+2]/255;
-     const hi=Math.max(r,g,b),lo=Math.min(r,g,b),delta=hi-lo;
-     if(hi<.10||delta<.06)continue;
-     let hue=0;if(delta){if(hi===r)hue=((g-b)/delta)%6;else if(hi===g)hue=(b-r)/delta+2;else hue=(r-g)/delta+4;hue=((hue*60)+360)%360;}
-     if((hue>=32&&hue<=78)||delta<.075)continue;
-     const light=(hi+lo)/2,sat=delta/(1-Math.abs(2*light-1));
-     if(!Number.isFinite(sat))continue;
-     const ns=Math.min(.91,Math.max(.4,.65*sat+.35*targetSat));
-     const nl=Math.max(.12,Math.min(.91,light));
-     const a=ns*Math.min(nl,1-nl);
-     const channel=n=>{const k=(n+targetHue/30)%12;return nl-a*Math.max(-1,Math.min(k-3,9-k,1))};
-     p[j]=Math.round(channel(0)*255);p[j+1]=Math.round(channel(8)*255);p[j+2]=Math.round(channel(4)*255);
-   }
- }
- const regions=ponyRegions[id];
- if(padHue!==null)changeRegion(regions.blanket,padHue,.75);
- if(saddleHue!==null)changeRegion(regions.saddle,saddleHue,.8);
- ctx.putImageData(image,0,0);return canvas.toDataURL('image/png');
-}
-function syncPonyImages(){
- document.querySelectorAll('img[data-pony]').forEach(img=>{
- const id=img.dataset.pony,sh=img.dataset.saddleHue,ph=img.dataset.padHue;
- const saddle=sh===''?null:Number(sh),pad=ph===''?null:Number(ph);
- if(saddle===null&&pad===null)return;
- const key=id+'-'+sh+'-'+ph;
- if(ponyVariantCache.has(key)){if(img.src!==ponyVariantCache.get(key))img.src=ponyVariantCache.get(key);return}
- if(ponyVariantTasks.has(key))return;
- const source=new Image();
- const task=new Promise((resolve,reject)=>{source.onload=()=>{try{resolve(renderPonyVariant(source,id,saddle,pad))}catch(e){reject(e)}};source.onerror=reject;source.src='assets/'+id+'.png'});
- ponyVariantTasks.set(key,task);
- task.then(url=>{ponyVariantCache.set(key,url);document.querySelectorAll('img[data-pony]').forEach(el=>{if(el.dataset.pony===id&&el.dataset.saddleHue===sh&&el.dataset.padHue===ph)el.src=url})}).catch(err=>console.error('Kunde inte skapa hästbilden',err)).finally(()=>ponyVariantTasks.delete(key));
- });
-}
-
 function renderTop(){$('starCount').textContent=state.stars;$('stableStars').textContent=state.stars;$('soundBtn').textContent=state.sound?'🔊':'🔇';$('soundBtn').setAttribute('aria-label',state.sound?'Stäng av ljud':'Sätt på ljud');$('heroHorse').innerHTML=horseSVG(state.horse);}
 function toast(message){const area=$('toastArea');area.innerHTML=`<div class="toast">${esc(message)}</div>`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{area.innerHTML=''},2700)}
 function nav(to){if(game&&screen==='game'&&to!=='game'){if(!confirm('Vill du lämna hoppbanan? Det här loppet sparas inte.'))return;game=null;clearTimeout(animTimer);cancelAnimationFrame(rideFrame);rideToken++}screen=to;document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!=='screen-'+to);document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.nav===to));if(to==='setup')renderSetup();if(to==='stable')renderStable();if(to==='home')renderTop();scrollTo({top:0,behavior:'smooth'});}
@@ -257,17 +174,21 @@ function renderSetup(){renderHorseChoices('horseChoices');$('tableChoices').inne
 function renderStable(){
  renderTop();
  $('stableHorse').innerHTML=horseSVG(state.horse);
- $('stableHorseName').textContent=HORSES.find(h=>h.id===state.horse).name;
+ $('stableHorseName').textContent='Stjärna – nivå '+state.stage+' av 10';
  renderHorseChoices('stableHorseChoices');
- const categories=['Sadel','Schabrak','Hästtäcke','Dekoration'];
- const names={Sadel:'🪑 Sadlar',Schabrak:'🎨 Schabrak',Hästtäcke:'🧥 Hästtäcken',Dekoration:'✨ Dekorationer'};
- $('shopGrid').innerHTML=categories.map(cat=>
-   `<h3 class="shop-category">${names[cat]}</h3>`+SHOP.filter(item=>item.category===cat).map(item=>{
-     const owned=state.owned.includes(item.id),equipped=state.equipped.includes(item.id);
-     return `<div class="shop-item"><span class="shop-emoji">${item.emoji}</span><strong>${item.name}</strong><span class="tiny">${owned?'Köpt ✓':item.price+' ⭐'}</span><button class="btn ${equipped?'yellow':'secondary'}" data-item="${item.id}" ${!owned&&state.stars<item.price?'disabled':''}>${equipped?'Ta av':owned?'Ta på':'Köp'}</button></div>`;
-   }).join('')
- ).join('');
- $('achievements').innerHTML=[['club','🎀','Klubbhoppning'],['local','🥈','Lokaltävling'],['championship','🏆','Mästerskap']].map(([id,emoji,label])=>`<div class="achieve"><span>${emoji} ${label}</span><span>${state.wins[id]||0} vinster</span></div>`).join('')+`<div class="achieve"><span>✨ Rätt svar totalt</span><span>${state.totalCorrect}</span></div>`
+ $('shopGrid').innerHTML=SHOP.map((item,i)=>{
+  const bought=i<state.stage, next=i===state.stage, affordable=state.stars>=item.price;
+  const disabled=bought||!next||!affordable;
+  return `<div class="shop-item ${next?'next-purchase':''}">
+   <span class="shop-emoji">${item.emoji}</span>
+   <strong>${i+1}. ${item.name}</strong>
+   <span class="tiny">${bought?'Köpt ✓':item.price+' ⭐'}</span>
+   <button class="btn ${next?'yellow':'secondary'}" data-item="${item.id}" ${disabled?'disabled':''}>${bought?'Köpt ✓':next?'Köp':'🔒 Låst'}</button>
+  </div>`;
+ }).join('');
+ $('achievements').innerHTML=`<div class="achieve"><span>🎒 Utrustningsnivå</span><span>${state.stage} / 10</span></div>`+
+ [['club','🎀','Klubbhoppning'],['local','🥈','Lokaltävling'],['championship','🏆','Mästerskap']].map(([id,emoji,label])=>`<div class="achieve"><span>${emoji} ${label}</span><span>${state.wins[id]||0} vinster</span></div>`).join('')+
+ `<div class="achieve"><span>✨ Rätt svar totalt</span><span>${state.totalCorrect}</span></div>`;
 }
 function chooseQuestions(tables,n){const pool=[];tables.forEach(a=>{for(let b=1;b<=10;b++)pool.push({a,b,answer:a*b,key:[Math.min(a,b),Math.max(a,b)].join('x')})});let prioritized=pool.filter(p=>(state.wrongFacts[p.key]||0)>0);shuffle(prioritized);const rest=shuffle([...pool]);const result=[];const seen=new Set();const priorityCount=Math.min(Math.ceil(n*.4),prioritized.length);for(const q of [...prioritized.slice(0,priorityCount),...rest]){const id=q.a+'x'+q.b;if(!seen.has(id)){seen.add(id);result.push(q);if(result.length===n)break}}while(result.length<n){result.push({...pool[Math.floor(Math.random()*pool.length)]})}return result}
 function shuffle(arr){for(let i=arr.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
@@ -345,24 +266,14 @@ function submitAnswer(){if(!game||locked||!answer)return;const q=game.questions[
 function nextQuestion(){if(!game||!locked)return;game.index++;if(game.index>=game.questions.length){finishGame();return}showQuestion()}
 function finishGame(){const g=game;game=null;let won=g.mode!=='practice'&&g.errors===0;let bonus=won?(g.mode==='championship'?20:g.mode==='local'?12:7):g.mode==='practice'?3:0;state.stars+=bonus;g.earned+=bonus;if(won)state.wins[g.mode]=(state.wins[g.mode]||0)+1;save();renderTop();nav('result');$('resultIcon').textContent=won?(g.mode==='championship'?'🏆':'🎀'):(g.mode==='practice'?'🌟':'🐴');$('resultTitle').textContent=won?'Felfritt lopp!':g.mode==='practice'?'Strålande träning!':'Bra kämpat!';$('resultMessage').textContent=won?'Vilken stjärnryttare! Du har vunnit en rosett!':g.mode==='practice'?'Nu är du ännu bättre på gångertabellen!':'Nästan! Träna på de svåra talen och försök igen för att vinna rosetten.';$('resultCorrect').textContent=g.correct+' / '+g.questions.length;$('resultErrors').textContent=g.errors;$('resultStars').textContent='+'+g.earned;const errors=[...new Set(g.mistakes)];$('resultReview').classList.toggle('hidden',errors.length===0);$('resultReview').innerHTML=errors.length?`🧠 Öva lite extra på: <strong>${errors.map(esc).join(' · ')}</strong>`:'';$('progressFill').style.width='100%';$('progressBar').setAttribute('aria-valuenow','100');if(won)tone(true)}
 function shopAction(id){
- const item=SHOP.find(i=>i.id===id);if(!item)return;
- const owned=state.owned.includes(id),wearing=state.equipped.includes(id);
- if(!owned){
-   if(state.stars<item.price)return;
-   state.stars-=item.price;state.owned.push(id);
-   toast(item.emoji+' '+item.name+' köpt!');
- }
- if(wearing){
-   state.equipped=state.equipped.filter(x=>x!==id);
- }else{
-   const incompatible=SHOP.filter(other=>(item.category!=='Dekoration'&&other.category===item.category)||
-     (item.category==='Hästtäcke'&&['Sadel','Schabrak'].includes(other.category))||
-     (['Sadel','Schabrak'].includes(item.category)&&other.category==='Hästtäcke'))
-     .map(x=>x.id);
-   state.equipped=state.equipped.filter(x=>!incompatible.includes(x));
-   state.equipped.push(id);
- }
- save();renderStable();
+ const i=SHOP.findIndex(item=>item.id===id);
+ if(i<0||i!==state.stage||state.stars<SHOP[i].price)return;
+ const item=SHOP[i];
+ state.stars-=item.price;
+ state.stage=i+1;
+ save();
+ toast(item.emoji+' '+item.name+' köpt!');
+ renderStable();
 }
 function resetSame(){beginTraining()}
 document.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;if(t.dataset.nav)nav(t.dataset.nav);else if(t.dataset.go)nav(t.dataset.go);else if(t.dataset.horse){state.horse=t.dataset.horse;save();renderTop();if(screen==='setup')renderSetup();else renderStable()}else if(t.dataset.table){const n=Number(t.dataset.table);state.tables=state.tables.includes(n)?state.tables.filter(x=>x!==n):[...state.tables,n].sort((a,b)=>a-b);save();renderSetup()}else if(t.dataset.mode){state.mode=t.dataset.mode;save();renderSetup()}else if(t.dataset.trainingAnswer)selectTrainingAnswer(Number(t.dataset.trainingAnswer),t);else if(t.dataset.digit)inputDigit(t.dataset.digit);else if(t.dataset.item)shopAction(t.dataset.item)});
