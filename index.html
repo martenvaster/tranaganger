@@ -134,9 +134,6 @@
 <section class="screen" id="screen-result" hidden><div class="panel result"><div class="giant" id="resultIcon">🏆</div><h1 id="resultTitle">Vilket fantastiskt lopp!</h1><p id="resultMessage">Du var jätteduktig!</p><div class="result-stats"><div class="stat"><big id="resultCorrect">0</big>Rätt svar</div><div class="stat"><big id="resultErrors">0</big>Rivningar</div><div class="stat"><big id="resultStars">0</big>Nya ⭐</div></div><div id="resultReview" class="helper hidden" style="text-align:left;max-width:550px;margin:0 auto 19px"></div><div class="buttons"><button class="btn" id="retryBtn">🔁 Hoppa igen</button><button class="btn secondary" data-go="stable">🐴 Mitt stall</button><button class="btn white" data-go="home">🏡 Hem</button></div></div></section>
 <section class="screen" id="screen-stable" hidden><div class="panel"><div class="heading"><h1>🐴 Mitt mysiga stall</h1><span class="eyebrow">⭐ <span id="stableStars">0</span> STJÄRNOR</span></div><p class="subhead">Stjärna får ett nytt utseende efter varje köp. Tillbehören låses upp i tur och ordning.</p><div class="stable-layout"><div><div class="stable-scene"><div id="stableHorse"></div><div class="stable-name" id="stableHorseName">Stjärna</div></div><h2 class="section-title" style="margin-top:22px">Din ponny</h2><div class="horse-grid" id="stableHorseChoices"></div></div><div><div class="small-panel"><h2>🛍️ Ponnyaffären</h2><p class="tiny muted">Köp nästa sak när du har tillräckligt många stjärnor!</p><div class="shop-grid" id="shopGrid"></div></div><div class="small-panel" style="margin-top:19px"><h2>🏅 Dina rosetter</h2><div id="achievements"></div></div></div></div><div style="text-align:center;margin-top:24px"><button class="btn" data-go="setup">🏇 Till nästa tävling!</button></div></div></section>
 </main><footer class="footer">Hästmatte · Stjärnas bildserie 🐴 · Sparar automatiskt på den här enheten · Inga konton eller annonser</footer></div><div id="toastArea" aria-live="polite"></div>
-<script src="assets/pony-stages-0.js?v=2"></script>
-<script src="assets/pony-stages-1.js?v=2"></script>
-<script src="assets/pony-stages-2.js?v=2"></script>
 <script>
 (()=>{'use strict';
 const HORSES=[{id:'stjarna',name:'Stjärna',desc:'Modig och glad'}];
@@ -169,8 +166,8 @@ try{if(localStorage.getItem('hastmatte-test-300-v1')!=='yes'){
 const $=id=>document.getElementById(id);function save(){try{localStorage.setItem(STORAGE,JSON.stringify(state))}catch(e){}}function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function currentStageName(){return state.stage===0?'Grundhäst':SHOP[state.stage-1].name}
 function stageSource(){
- const stage=window.PONY_STAGES;
- return Array.isArray(stage)&&stage[state.stage]?stage[state.stage]:'assets/stjarna.png';
+ const level=Math.max(0,Math.min(10,Number(state.stage)||0));
+ return 'assets/stages/stage'+String(level).padStart(2,'0')+'.webp?v=3';
 }
 function horseSVG(id,accessories=true){
  return `<span class="pony-wrap"><img class="horse-svg" src="${stageSource()}" alt="Stjärna, ${esc(currentStageName())}" draggable="false"></span>`;
