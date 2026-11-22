@@ -193,7 +193,7 @@ function horseSVG(id,accessories=true){
   if(has('starclip'))layers+=`<path d="M${x+50} ${y-39} l9 21 23 1-18 14 7 22-21-13-20 13 7-22-18-14 23-1Z" fill="#ffd75c" stroke="#65435c" stroke-width="5" stroke-linejoin="round"/>`;
  }
  const source=`assets/${h.id}.png`;
- const isVariant=Boolean(saddle||pad);
+ if(saddle||pad)requestAnimationFrame(syncPonyImages);
  return `<span class="pony-wrap"><img class="horse-svg" data-pony="${h.id}" data-saddle-hue="${saddle?saddle.hue:''}" data-pad-hue="${pad?pad.hue:''}" src="${source}" alt="${esc(h.name)}, en glad tecknad ponny i språng" draggable="false">${layers?`<svg class="pony-gear" viewBox="0 0 ${f.w} ${f.h}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${layers}</svg>`:''}</span>`;
 }
 // Originalillustrationerna lämnas orörda. Canvas skapar bildvarianter
@@ -355,7 +355,7 @@ function shopAction(id){
  if(wearing){
    state.equipped=state.equipped.filter(x=>x!==id);
  }else{
-   const incompatible=SHOP.filter(other=>other.category===item.category||
+   const incompatible=SHOP.filter(other=>(item.category!=='Dekoration'&&other.category===item.category)||
      (item.category==='Hästtäcke'&&['Sadel','Schabrak'].includes(other.category))||
      (['Sadel','Schabrak'].includes(item.category)&&other.category==='Hästtäcke'))
      .map(x=>x.id);
