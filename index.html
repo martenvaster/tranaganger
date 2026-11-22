@@ -230,10 +230,10 @@ if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){placeHorse(end
 
 // Felaktiga alternativ hålls minst fyra enheter från det rätta svaret och från varandra.
 function trainingChoices(correct){
-  // Heltal inom ±10 %. För små produkter utökas intervallet bara
+  // Heltal inom ±25 %. För små produkter utökas intervallet bara
   // så mycket som krävs för fem olika positiva svarsalternativ.
-  let low=Math.max(1,Math.ceil(correct*0.9-1e-9));
-  let high=Math.floor(correct*1.1+1e-9);
+  let low=Math.max(1,Math.ceil(correct*0.75-1e-9));
+  let high=Math.floor(correct*1.25+1e-9);
   while(high-low+1<5){
     low=Math.max(1,low-1);
     high++;
