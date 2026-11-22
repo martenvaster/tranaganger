@@ -116,8 +116,8 @@
 <section class="screen" id="screen-setup" hidden><div class="panel"><div class="heading"><h1>🏇 Dags att sadla upp!</h1><span class="eyebrow">VÄLJ DITT ÄVENTYR</span></div><h2 class="section-title">1. Välj din ponny</h2><div class="horse-grid" id="horseChoices"></div><div class="setup-layout" style="margin-top:24px"><div class="small-panel"><h2>2. Vilka tabeller?</h2><p class="muted tiny">Tryck på de tabeller du vill träna.</p><div class="table-chips" id="tableChoices"></div><div class="inline-actions" style="margin-top:13px"><button class="mini-btn" id="chooseAll">Alla</button></div></div><div class="small-panel"><h2>3. Välj ditt äventyr</h2><div class="config-rows" id="modeChoices"><button class="choice selected" data-mode="club">🎀 Klubbhoppning · 5 hinder <span>✓</span></button><button class="choice" data-mode="local">🏅 Lokaltävling · 8 hinder <span></span></button><button class="choice" data-mode="championship">🏆 Mästerskap · 10 hinder <span></span></button></div></div></div><div class="setup-footer"><span class="tiny" id="setupNote">Välj minst en gångertabell.</span><button class="btn green" id="startBtn">Börja träna! ➜</button></div></div></section>
 
 <section class="screen" id="screen-training" hidden><div class="panel">
- <div class="heading"><div><h1>🧠 Uppvärmning i stallet</h1><p class="subhead">Klara fem träningsfrågor innan du får starta din hopptävling!</p></div><button class="mini-btn" id="leaveTraining">✕ Tillbaka</button></div>
- <div class="training-card"><div class="training-progress" id="trainingProgress">Fråga 1 av 5</div>
+ <div class="heading"><div><h1>🧠 Uppvärmning i stallet</h1><p class="subhead">Öva på exakt de tal som kommer i tävlingen. Antalet frågor beror på tävlingsnivån!</p></div><button class="mini-btn" id="leaveTraining">✕ Tillbaka</button></div>
+ <div class="training-card"><div class="training-progress" id="trainingProgress">Uppvärmning</div>
  <div class="training-question" id="trainingQuestion">3 × 4 = ?</div>
  <p class="muted" style="font-weight:800">Välj rätt svar bland fem alternativ.</p>
  <div class="training-options" id="trainingOptions" role="group" aria-label="Fem svarsalternativ"></div>
@@ -189,7 +189,7 @@ function trainingChoices(correct){
 }
 function beginTraining(){
   if(!state.tables.length){toast('Välj minst en gångertabell!');return}
-  training={questions:chooseQuestions(state.tables,5),index:0,solved:false,wrongAttempts:0};
+  training={questions:chooseQuestions(state.tables,MODE[state.mode].length),index:0,solved:false,wrongAttempts:0};
   nav('training');showTrainingQuestion();
 }
 function showTrainingQuestion(){
@@ -223,10 +223,11 @@ function advanceTraining(){
   if(!training||!training.solved)return;
   training.index++;
   if(training.index<training.questions.length){showTrainingQuestion();return}
+  const trainedQuestions=training.questions.map(q=>({...q}));
   training=null;
-  startGame();
+  startGame(trainedQuestions);
 }
-function startGame(){if(!state.tables.length){toast('Välj minst en tabell!');return}const mode=state.mode;game={mode,questions:chooseQuestions(state.tables,MODE[mode].length),index:0,correct:0,errors:0,earned:0,mistakes:[],tryCount:0,results:[]};answer='';locked=false;nav('game');$('gameTitle').textContent=MODE[mode].name;$('gameSubtitle').textContent=mode==='practice'?'Här får du öva i din egen takt.':'Svara rätt på alla hinder för att vinna!';$('arenaHorse').innerHTML=horseSVG(state.horse);showQuestion()}
+function startGame(trainedQuestions){if(!Array.isArray(trainedQuestions)||trainedQuestions.length!==MODE[state.mode].length){toast('Genomför uppvärmningen först!');return}const mode=state.mode;game={mode,questions:trainedQuestions,index:0,correct:0,errors:0,earned:0,mistakes:[],tryCount:0,results:[]};answer='';locked=false;nav('game');$('gameTitle').textContent=MODE[mode].name;$('gameSubtitle').textContent=mode==='practice'?'Här får du öva i din egen takt.':'Svara rätt på alla hinder för att vinna!';$('arenaHorse').innerHTML=horseSVG(state.horse);showQuestion()}
 function showQuestion(){if(!game)return;locked=false;answer='';game.tryCount=0;const q=game.questions[game.index];$('questionText').textContent=`${q.a} × ${q.b} = ?`;$('questionIntro').textContent=game.mode==='practice'?'Vad blir...':'Hoppa över hinder '+(game.index+1)+'!';$('answerDisplay').textContent='?';$('feedbackSlot').innerHTML='';$('nextBtn').classList.add('hidden');$('nextBtn').disabled=false;$('keypad').classList.remove('hidden');$('gameTip').classList.remove('hidden');renderCourse(game.index);placeHorse(horseBefore(game.index,game.questions.length));$('arenaSfx').innerHTML='';$('progressText').textContent=(game.mode==='practice'?'Tal ':'Hinder ')+(game.index+1)+' av '+game.questions.length;$('scoreText').textContent=`⭐ ${game.correct} rätt`;$('progressFill').style.width=(game.index/game.questions.length*100)+'%';$('progressBar').setAttribute('aria-valuenow',String(Math.round(game.index/game.questions.length*100)))}
 function inputDigit(d){if(!game||locked||screen!=='game')return;if(d==='delete'){answer=answer.slice(0,-1)}else if(d==='enter'){submitAnswer();return}else if(answer.length<3){answer+=d} $('answerDisplay').textContent=answer||'?'}
 function tone(win){if(!state.sound)return;try{audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();let t=audioCtx.currentTime;const notes=win?[523,659,784]:[300,260];notes.forEach((hz,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=hz;o.connect(g);g.connect(audioCtx.destination);g.gain.setValueAtTime(.0001,t+i*.11);g.gain.exponentialRampToValueAtTime(.12,t+i*.11+.02);g.gain.exponentialRampToValueAtTime(.0001,t+i*.11+.15);o.start(t+i*.11);o.stop(t+i*.11+.17)})}catch(e){}}
