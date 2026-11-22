@@ -153,12 +153,19 @@ const SHOP=[
 {id:'krona',name:'Gyllene krona',emoji:'👑',price:100}
 ];
 const MODE={club:{name:'🎀 Klubbhoppning',length:5},local:{name:'🏅 Lokaltävling',length:8},championship:{name:'🏆 Mästerskap',length:10}};
-const STORAGE='hastmatte-v2';const defaults={stars:0,horse:'stjarna',tables:[2,5,10],mode:'club',stage:0,owned:[],equipped:[],wins:{club:0,local:0,championship:0},totalCorrect:0,wrongFacts:{},sound:true};
+const STORAGE='hastmatte-v2';const defaults={stars:300,horse:'stjarna',tables:[2,5,10],mode:'club',stage:0,owned:[],equipped:[],wins:{club:0,local:0,championship:0},totalCorrect:0,wrongFacts:{},sound:true};
 function load(){try{const x=JSON.parse(localStorage.getItem(STORAGE));if(!x||typeof x!=='object')return {...defaults};return {...defaults,...x,stars:Math.max(0,Number(x.stars)||0),tables:Array.isArray(x.tables)?x.tables.filter(n=>Number.isInteger(n)&&n>=1&&n<=10):defaults.tables,stage:Math.max(0,Math.min(10,Math.trunc(Number(x.stage)||0))),owned:Array.isArray(x.owned)?x.owned:[],equipped:Array.isArray(x.equipped)?x.equipped:[],wins:{...defaults.wins,...x.wins},wrongFacts:(x.wrongFacts&&typeof x.wrongFacts==='object')?x.wrongFacts:{}}}catch(e){return {...defaults}}}
 let state=load(),game=null,training=null,answer='',locked=false,screen='home',toastTimer=null,audioCtx=null,animTimer=null;
 if(state.mode==='practice'||!MODE[state.mode])state.mode='club';
 // Testversionen använder en enda ponny även om ett tidigare sparat val finns.
 state.horse='stjarna';
+// Engångspåfyllning för testet: gäller även tidigare sparade spel.
+try{if(localStorage.getItem('hastmatte-test-300-v1')!=='yes'){
+ state.stars=Math.max(300,state.stars);
+ localStorage.setItem(STORAGE,JSON.stringify(state));
+ localStorage.setItem('hastmatte-test-300-v1','yes');
+}}catch(e){state.stars=Math.max(300,state.stars);}
+
 const $=id=>document.getElementById(id);function save(){try{localStorage.setItem(STORAGE,JSON.stringify(state))}catch(e){}}function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function currentStageName(){return state.stage===0?'Grundhäst':SHOP[state.stage-1].name}
 function stageSource(){
